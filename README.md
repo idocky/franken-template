@@ -16,4 +16,4 @@
    ```bash
    docker compose exec app php artisan migrate
    ```
-   Сайт: `http://localhost:10102`  
+   Сайт: `http://127.0.0.1:10102`  
