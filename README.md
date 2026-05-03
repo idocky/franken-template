@@ -1,4 +1,4 @@
-# Docker run
+# Docker + Laravel 12 + Frankenphp
 
 1. Поднять контейнеры:
    ```bash
