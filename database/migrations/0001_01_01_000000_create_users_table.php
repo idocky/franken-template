@@ -15,8 +15,6 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('phone');
-            $table->uuid('spin_uuid')->unique();
-            $table->boolean('is_active')->default(true);
             $table->rememberToken();
             $table->timestamps();
         });

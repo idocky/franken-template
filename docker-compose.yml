@@ -1,23 +1,17 @@
 version: '3'
 
 services:
-  nginx:
-    image: nginx:latest
-    volumes:
-      - ./:/var/www
-      - ./_docker/nginx/conf.d:/etc/nginx/conf.d
-    ports:
-      - "10102:80"
-    depends_on:
-      - app
-    container_name: nux_nginx
-
   app:
     build:
       context: .
       dockerfile: _docker/app/Dockerfile
     volumes:
-      - ./:/var/www
+      - ./:/app
+    environment:
+      - SERVER_NAME=:80
+    ports:
+      - '10102:80'
+      - "10443:443"
     depends_on:
       - db
     container_name: nux_app
@@ -34,3 +28,21 @@ services:
       - "10101:3306"
     command: mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci
     container_name: nux_db
+
+  rabbitmq:
+    image: rabbitmq:3-management  # образ с включённым плагином management
+    container_name: rabbitmq
+    hostname: rabbitmq
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+      - RABBITMQ_DEFAULT_VHOST=/
+    ports:
+      - "5672:5672"   # AMQP порт
+      - "15672:15672" # Web UI
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    restart: unless-stopped
+
+volumes:
+  rabbitmq_data:
